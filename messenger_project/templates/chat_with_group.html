@@ -1,0 +1,29 @@
+{% extends "index.html" %}
+
+{% block content %}
+<h2>Групповой Чат: {{ chat_group.name }}</h2>
+
+<div id="chat-log" style="border: 1px solid #ddd; padding: 10px; height: 300px; overflow-y: scroll;">
+    {% for message in messages %}
+        <p>{{ message.author.username }}: <span class="message-content">{{ message.content }}</span>
+           <span class="message-timestamp">({{ message.timestamp|date:"d/m/Y H:i" }})</span></p>
+    {% endfor %}
+</div>
+
+<form method="post" class="message-form" action="{% url 'send_message_to_group' chat_group.id %}">
+    {% csrf_token %}
+    <textarea id="chat-message-input" name="content" placeholder="Type your message here..." required></textarea>
+    <button type="submit">Send</button>
+</form>
+
+<style>
+    .message-content {
+        font-size: 14px;
+    }
+
+    .message-timestamp {
+        color: gray;
+        font-size: 12px;
+    }
+</style>
+{% endblock %}

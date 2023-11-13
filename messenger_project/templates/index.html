@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messenger</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f0f8ff; }
+        .header { background: #87CEEB; color: white; padding: 10px 0; text-align: center; }
+        .header h1 { margin: 0; font-size: 24px; }
+        .menu { background: #333; color: white; padding: 10px 0; text-align: center; }
+        .menu a { margin: 0 20px; text-decoration: none; color: white; font-weight: bold; }
+        .container { padding: 20px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Messenger</h1>
+    </div>
+    <div class="menu">
+        <a href="{% url 'index' %}">Главная</a>
+        <a href="{% url 'user_list' %}">Список пользователей</a>
+        <a href="{% url 'messages_page' %}">Сообщения</a>
+        <a href="{% url 'profile' %}">{{ user.username }}</a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'logout' %}">Выход</a>
+        {% else %}
+            <a href="{% url 'login' %}">Вход</a>
+            <a href="{% url 'register' %}">Регистрация</a>
+        {% endif %}
+    </div>
+    <div class="container">
+        {% block content %}
+
+        {% endblock %}
+    </div>
+</body>
+</html>

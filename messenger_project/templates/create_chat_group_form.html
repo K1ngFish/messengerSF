@@ -1,0 +1,16 @@
+{% extends "index.html" %}
+
+{% block content %}
+<form action="{% url 'create_chat_group' %}" method="post">
+    {% csrf_token %}
+    <label for="name">Название группы:</label>
+    <input type="text" name="name" required><br>
+    <label for="members">Выберите участников:</label>
+    <select name="members" multiple required>
+        {% for user in users %}
+        <option value="{{ user.id }}">{{ user.username }}</option>
+        {% endfor %}
+    </select><br>
+    <input type="submit" value="Создать">
+</form>
+{% endblock %}

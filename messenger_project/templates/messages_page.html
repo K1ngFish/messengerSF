@@ -1,0 +1,58 @@
+{% extends "index.html" %}
+
+{% block content %}
+<h2>Групповые чаты</h2>
+<ul>
+    {% for chat in chats %}
+        <li>
+            <a href="{% url 'chat_with_group' chat.id %}">{{ chat.name }}</a>
+            {% if request.user == chat.creator %}
+                <button onclick="changeChatName('{{ chat.id }}')">Изменить название</button>
+            {% endif %}
+        </li>
+    {% endfor %}
+
+</ul>
+
+<a href="{% url 'create_chat_group_form' %}">Создать групповой чат</a>
+
+<script>
+    function changeChatName(chatId) {
+        var newName = prompt("Введите новое название чата:");
+        if (newName) {
+            fetch(`/chat/edit_chat_group/${chatId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({ name: newName })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'Групповой чат успешно обновлён') {
+                    location.reload();
+                } else {
+                    alert("Произошла ошибка при обновлении названия чата.");
+                }
+            });
+        }
+    }
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>
+
+{% endblock %}

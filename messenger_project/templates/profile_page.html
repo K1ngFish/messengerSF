@@ -1,0 +1,21 @@
+{% extends 'index.html' %}
+
+{% block content %}
+    <h2>Профиль</h2>
+
+    <h3>Информация о профиле</h3>
+    <p>Имя пользователя: {{ user.username }}</p>
+    {% if user.avatar %}
+        <img src="{{ user.avatar.url }}" alt="Аватар пользователя">
+    {% else %}
+        <p>У вас нет аватара</p>
+    {% endif %}
+
+    <p> Изменить данные: </p>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.username.label_tag }} {{ form.username }}
+        {{ form.avatar.label_tag }} {{ form.avatar }}
+        <button type="submit">Сохранить</button>
+    </form>
+{% endblock %}
